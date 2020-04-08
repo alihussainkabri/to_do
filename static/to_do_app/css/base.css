@@ -1,0 +1,448 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+    scroll-behavior: smooth;
+}
+a{
+    text-decoration: none!important;
+    
+}
+/* <!-------------------- Navbar banner Section Starts Here ---------------------------> */
+
+#navbar{
+    width: 100%;
+    background: white;
+    position: fixed;
+    top: 0;
+    z-index: 2;
+}
+nav{
+    margin: 8px 0;
+    padding: 8px 3rem!important;
+}
+.navbar-brand img{
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+}
+.navbar-brand span{
+    margin-right: 5px;
+    font-size: 23px;
+    font-weight: 600;
+    color: #0da5f3;
+}
+.navbar-collapse ul{
+    margin-left:5px;
+}
+.navbar-collapse ul li{
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 16px;
+    margin: 0 7px;
+    color: #efefef!important;
+    padding: 2px 4px;
+}
+.navbar-collapse .login-btn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 45px;
+    width: 120px;
+    margin-left: 400px;
+    margin-top: 10px;
+    font-weight: 400!important;
+    border: 1px solid #0083ff;
+    padding: 0px 16px!important;
+    border-radius: 25px;
+    transition: .5s ease;
+}
+.navbar-collapse .login-btn:hover{
+    background-color:#0083ff;
+    color: white!important;
+}
+.navbar-collapse .login-btn:hover a{
+    color: white!important;
+}
+
+/* <!-------------------- header banner Section Starts Here ---------------------------> */
+
+#header{
+    background-color: ghostwhite;
+    padding: 100px 0;
+}
+.header-text{
+    padding: 60px 0;
+}
+.header-text h1{
+    font-weight: 600;
+    font-size: 58px;
+    margin-bottom: 30px;
+}
+.header-text h2{
+    font-weight: 600;
+    font-size: 30px;
+    margin-bottom: 40px;
+}
+.header-text button{
+    width: 231.5px;
+    height: 48px;
+    font-size: 20px;
+    padding: 0 16px;
+    outline: none;
+    border: none;
+    background: #0083ff;
+    box-shadow: 0 11px 26px 0 rgba(0,0,0,0.23);
+    font-weight: 500;
+    color: white;
+    transition: .5s ease;
+}
+.header-text button:hover{
+    background: hsla(272, 86%, 14%, 0.404);
+}
+
+/* <!-------------------- about banner Section Starts Here ---------------------------> */
+#about{
+    padding: 100px 0;
+}
+#about img{
+    box-shadow: 0 5px 32px 0 rgba(0,0,0,0.16);
+    border-radius: 11px;
+}
+#about h4{
+    color: #9197a3;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+#about h2{
+    font-size: 34px;
+    font-weight: 600;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    text-transform: capitalize;
+}
+#about p{
+    margin-top: 10px;
+    margin-bottom: 20px;
+    font-size: 22px;
+    max-width: 500px;
+    word-spacing: 1.6px;
+}
+
+/* <!-------------------- feature banner Section Starts Here ---------------------------> */
+#feature{
+    padding: 100px 0;
+}
+#feature .icons{
+    text-align: center;
+}
+#feature .icons img{
+    margin: 0 18px;
+    box-shadow: 0 4px 10px 0 rgba(0,0,0,0.1);
+    width: 106px;
+    height: 106px;
+    margin-bottom: 20px;
+}
+#feature .container h2{
+    margin: 30px 0;
+    text-transform: capitalize;
+    font-size: 34px;
+    font-weight: 600;
+}
+#feature .container p{
+    font-size: 22px;
+    word-spacing: 1.6px;
+    margin: 20px 0;
+}
+
+/* <!-------------------- user banner Section Starts Here ---------------------------> */
+#user{
+    padding: 60px 0;
+    background-image: linear-gradient(160deg, ghostwhite 55%, white 0%);
+    
+}
+#user .container{position: relative;}
+#user .container h2{
+    font-weight: 600;
+    /* margin-bottom: 10px; */
+    text-align: center;
+    font-size: 34px;
+}
+#user .container h2::after{
+    content: '';
+    display: block;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 4px;
+    width: 200px;
+    margin-top: 20px;
+    background-color: #000;
+}
+.carousel-item img{
+    width: 150px;
+    border-radius: 50%;
+}
+.carousel-item{
+    text-align: center;
+    height: 430px;
+    margin-top: 100px;
+}
+.carousel-caption{
+    box-shadow: 0 0 15px 1px rgba(166,163,223,0.5);
+    border-radius: 5px;
+    margin-bottom: 50px;
+    color: #000!important;
+    z-index: -1;
+}
+.carousel-caption h6{
+    margin-top: 55px;
+    font-weight: bold;
+}
+.carousel-caption small{
+    margin-top: 10px;
+    margin-bottom: 50px;
+    display: block;
+}
+.carousel-caption p{
+    text-align: center;
+    padding: 0 50px;
+    font-size: 15px;
+}
+.carousel-indicators li{
+    background-color: #6900d1!important;
+}
+
+/* <!-------------------- contact Section Starts Here ---------------------------> */
+
+#contact {
+    padding: 120px 0;
+    background-color: ghostwhite;
+}
+#contact h1{
+    font-size: 34px;
+    font-weight: 600;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 40px;
+    text-transform: capitalize;
+}
+#contact form{
+    margin-top: 30px;
+    width: 90%;
+}
+#contact form input{
+    background: transparent!important;
+    outline: none!important;
+    border: none!important;
+    border-bottom: 1px solid black!important;
+    border-radius: none!important;
+    margin-bottom: 30px;
+}
+#contact form textarea{
+    background: transparent!important;
+    outline: none!important;
+    border: none!important;
+    border-bottom: 1px solid black!important;
+    border-radius: none!important;
+    margin-bottom: 30px;
+}
+#contact form button{
+    width: 231.5px;
+    height: 48px;
+    font-size: 20px;
+    padding: 0 16px;
+    outline: none;
+    border: none;
+    background: #0083ff;
+    box-shadow: 0 11px 26px 0 rgba(0,0,0,0.23);
+    font-weight: 500;
+    color: white;
+    transition: .5s ease;
+}
+#contact form button:hover{
+    background: hsla(272, 86%, 14%, 0.404);
+}
+::placeholder{
+    padding: 3px;
+    color: #949423!important;
+    font-weight: 600!important;
+}
+#contact form textarea::placeholder{
+    padding: 10px 0!important;
+}
+#contact img{
+    width: 100%;
+    margin: 0!important;
+    margin-top: 30px!important;
+    padding: 0!important;
+}
+
+
+/* <!-------------------- footer Section Starts Here ---------------------------> */
+
+#footer{
+    padding: 50px 0;
+    /* background-image: linear-gradient(#2d557d,#9610fb); */
+    background: #6900d1;
+}
+#footer img{
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+#footer span{
+    margin-bottom: 10px;
+    margin-right: 5px;
+    font-size: 25px;
+    font-weight: 600;
+    color: #fff;
+}
+#footer h3{
+    margin-top: 12px;
+    margin-bottom: 25px;
+    font-size: 23px;
+    font-weight: 600;
+    color: #fff;
+}
+#footer p{
+    color: #fff;
+    margin-top: 5px;
+}
+#footer .fa{
+    text-align: center;
+    font-size: 23px;
+    margin-right: 9px;
+}
+#footer p{
+    font-size: 18px;
+}
+
+
+
+@media only screen and (max-width:1232px){
+    .navbar-collapse ul li{
+        font-weight: 300!important;
+        margin: 0 4px!important;
+    }
+    .navbar-collapse .login-btn{
+        margin-left: 200px!important;
+    }
+    #feature{
+        padding-bottom: 50px!important;
+        height: 70vh!important;
+    }
+}
+@media only screen and (max-width:995px){    
+    #user{
+        margin-top: 130px!important;
+    }
+}
+@media only screen and (max-width:759px){
+    #header .header-row{
+        display: flex!important;
+        flex-direction: column-reverse!important;
+    }
+    #header .header-text{
+        margin-top: 40px!important;
+    }
+    #about img{
+        margin-bottom: 50px!important;
+    }
+    #about h4{
+        margin: 40px 0!important;
+    }
+    #about h2{
+        margin: 30px 0!important;
+    }
+    #about p{
+        margin: 30px 0!important;
+    }
+    #feature .icons{
+        margin-bottom: 60px!important;
+    }
+    .carousel-caption h6{
+        margin-top: 75px!important;
+
+    }
+    .carousel-caption small{
+        margin-top: 30px!important;
+        margin-bottom: 70px!important;
+    }
+    .carousel-caption{
+        margin-bottom: -40px!important;
+    }
+    .carousel-item{
+        margin-top: 120px!important;
+        height: 440px!important;
+    }
+    .carousel-indicators{
+        position: absolute;
+        left: 30%!important;
+        transform: translateX(-30%)!important;
+        bottom: -10%!important;
+    }
+    #contact img{
+        margin: 50px 0!important;
+    }
+    #contact .row{
+        display: flex!important;
+        flex-direction: column-reverse!important;
+    }
+    #footer .ft h3{
+        margin-top: 30px!important;
+    }
+    #footer .ft p{
+        margin-bottom: 10px!important;
+    }
+    #footer .ft .fa{
+        margin-right: 10px!important;
+    }
+    #user{
+        margin-top: 130px!important;
+    }
+}
+
+@media only screen and (max-width:572px){
+    #feature .icons img{
+        width: 95px!important;
+        height: 95px!important;
+    }
+}
+
+@media only screen and (max-width:535px){
+    #user{
+        margin-top: 230px!important;
+    }
+}
+@media only screen and (max-width:478px){
+    #user{
+        margin-top: 280px!important;
+    }
+}
+@media only screen and (max-width:441px){
+    #user{
+        margin-top: 280px!important;
+    }
+    .carousel-caption{
+        margin-bottom: -80px!important;
+    }   
+}
+@media only screen and (max-width:370px){
+    #user{
+        margin-top: 280px!important;
+    }
+    .carousel-caption{
+        margin-bottom: -130px!important;
+    }   
+}
+@media only screen and (max-width:320px){
+    #user{
+        margin-top: 280px!important;
+    }
+    .carousel-caption{
+        margin-bottom: -160px!important;
+    }   
+}

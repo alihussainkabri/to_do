@@ -1,0 +1,206 @@
+<!doctype html>
+{% load static %}
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="{% static 'to_do_app/css/base.css' %}">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>To-Do</title>
+  </head>
+  <body>
+      <!-------------------- Navbar Section Starts Here --------------------------->
+
+    <section id="navbar">
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <a class="navbar-brand" href="#"><img src="{% static 'to_do_app/images/logo.png' %}" alt=""><span>List2Do</span></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+          
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                  <a class="nav-link" href="#about">About Us</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#user">User Reviews</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#contact">Contact Us</a>
+                </li>
+                <li class="nav-item login-btn">
+                  <a class="nav-link" href="/login/">Login</a>
+                </li>
+              </ul>
+            </div>
+        </nav>
+    </section>
+
+    <!-------------------- header banner Section Starts Here --------------------------->
+
+    <section id="header">
+        <div class="container">
+            <div class="row header-row">
+                <div class="col-md-6 header-left">
+                    <div class="header-text text-left">
+                        <h1>Your busy life<br>deserves this.</h1>
+                        <h2>List2Do is an award wining app used by millions of people to stay organised and get more done.</h2>
+                        <button>Get Started - It's Free</button>
+                    </div>
+                </div>
+                <div class="col-md-6 header-right">
+                    <img src="{% static 'to_do_app/images/header1.svg' %}" class="img-fluid" alt="">
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-------------------- about Section Starts Here --------------------------->
+
+    <section id="about">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6">
+            <img src="{% static 'to_do_app/images/about_img.png' %}" class="img-fluid" alt="">
+          </div>
+          <div class="col-md-6">
+            <h4>SIMPLE</h4>
+            <h2>It's never been easier to<br>organize to your life</h2>
+            <p>Organize your tasks, lists and reminders in one easy List2Do app. Any.do syncs seamlessly across all of your devices, making your to-do list accessible everywhere.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-------------------- feature Section Starts Here --------------------------->
+
+    <section id="feature">
+      <div class="icons">
+        <img src="{% static 'to_do_app/images/today@2x_feature.png' %}" alt="">
+        <img src="{% static 'to_do_app/images/later@2x_feature.png' %}" alt="">
+        <img src="{% static 'to_do_app/images/done@2x_feature.png' %}" alt="">
+        <img src="{% static 'to_do_app/images/delete@2x_feature.png' %}" alt="">
+      </div>
+      <div class="container text-center">
+        <h2>The secret weapon of successful people</h2>
+        <p>Any.do Moment helps busy people like you focus on what’s important. It helps millions of <br>people save time for the things that really matter.</p>
+      </div>  
+    </section>
+
+    <!-------------------- user Section Starts Here --------------------------->
+
+    <section id="user">
+      
+      <div class="container">
+      <h2>User's Experiences</h2>
+      <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+        <ol class="carousel-indicators">
+          <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+          <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+          <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+        </ol>
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img src="{% static 'to_do_app/images/user.png' %}" alt="First slide">
+            <div class="carousel-caption">
+              <h6>George Symonds</h6>
+              <small>CEO & FOUNDER @XYZ</small>
+              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. <br>Id itaque atque amet eveniet, dolore minus ipsam <br>vel incidunt impedit assumenda.</p>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <img src="{% static 'to_do_app/images/user.png' %}" alt="First slide">
+            <div class="carousel-caption">
+              <h6>George Symonds</h6>
+              <small>CEO & FOUNDER @XYZ</small>
+              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. <br>Id itaque atque amet eveniet, dolore minus ipsam <br>vel incidunt impedit assumenda.</p>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <img src="{% static 'to_do_app/images/user.png' %}" alt="First slide">
+            <div class="carousel-caption">
+              <h6>George Symonds</h6>
+              <small>CEO & FOUNDER @XYZ</small>
+              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. <br>Id itaque atque amet eveniet, dolore minus ipsam <br>vel incidunt impedit assumenda.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </section>
+
+    <!-------------------- contact Section Starts Here --------------------------->
+
+    <section id="contact">
+      <div class="container">
+        <h1>Feel Free to tell us your query</h1>
+        <div class="row">
+          <div class="col-md-6">
+            <form>
+              <div class="form-group">
+                <!-- <label for="exampleFormControlInput1">Enter Your Name</label> -->
+                <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter your name">
+              </div>
+              <div class="form-group">
+                <!-- <label for="exampleFormControlInput1">Email address</label> -->
+                <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Enter your email">
+              </div>
+              <div class="form-group">
+                <!-- <label for="exampleFormControlTextarea1">Example textarea</label> -->
+                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Enter Your Query"></textarea>
+              </div>
+              <button class="btn btn-primary">SUBMIT</button>
+            </form>
+          </div>
+          <div class="col-md-6">
+            <img src="{% static 'to_do_app/images/contact.png' %}" alt="" class="">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-------------------- footer Section Starts Here --------------------------->
+
+    <section id="footer">
+      <footer>
+        <div class="container">
+          <div class="row">
+            <div class="col-md-3">
+              <a href=""><img src="{% static 'to_do_app/images/logo.png' %}" alt=""><span>List2Do</span></a>
+              <p>List2Do is an award-winning app used by millions of people to stay organized and get more done.</p>
+            </div>
+            <div class="col-md-3 ft">
+              <h3>Features</h3>
+              <p>Interactive GUI</p>
+              <p>Manage Your Task</p>
+              <p>Get Access Anytime</p>
+            </div>
+            <div class="col-md-3 ft">
+              <h3>Quick Contact</h3>
+              <p><i class="fa fa-phone-square"></i>+1234567890</p>
+              <p><i class="fa fa-envelope"></i> hello@example.com</p>
+              <p><i class="fa fa-home"></i> xyz road,Banglore</p>
+            </div>
+            <div class="col-md-3 ft">
+              <h3>Follow Us On</h3>
+              <p><i class="fa fa-facebook-official"></i> Facebook</p>
+              <p><i class="fa fa-youtube-play"></i> Youtube</p>
+              <p><i class="fa fa-twitter"></i> Twitter</p>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </section>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  </body>
+</html>

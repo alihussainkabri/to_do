@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <link rel="stylesheet" href="{% static 'to_do_app/css/index.css' %}" />
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <title>Hello, world!</title>
+  </head>
+  <body>
+    <div class="container">
+      <nav class="navbar navbar-expand-lg navbar-light">
+        <a class="navbar-brand" href="#"
+          ><button class="new" id="myBtn">
+            <i class="fa fa-plus"></i> New
+          </button></a
+        >
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="#"><i class="fa fa-bell-o"></i>Notifications</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/signout/"><i class="fa fa-sign-out"></i>Logout</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+    <form action="" id="myfrm" style="display: none;">
+      {% for l in l1 %}
+      <input type="hidden" value="{{l}}" />
+      {% endfor %}
+    </form>
+    <section id="main">
+      <div class="container">
+        <h1>Hey! Welcome, {{user.username}}</h1>
+        {% if d1 %}
+        <div class="row main_row">
+          <div class="col-md-7 events">
+            {% for key,value in d1.items %}
+            <div class="task_date">
+              <h2>{{key}}</h2>
+              {% for v in value %}
+              <div class="day {{v.class_name}}">
+                <div class="check">
+                  <input
+                    type="checkbox"
+                    onclick="ali(this);"
+                    value="{{v.class_name}}"
+                    id="{{v.class_name}}"
+                  />
+                </div>
+                <p onclick="full_detail(this)" id="{{v.class_name}}">
+                  {{v.title|slice:":34"}}
+                  <span
+                    ><i
+                      class="fa fa-times"
+                      id="{{v.class_name}}"
+                      onclick="cross(this)"
+                    ></i
+                  ></span>
+                </p>
+                <form action="">
+                  <input type="hidden" name="status" value="{{v.status}}" />
+                </form>
+              </div>
+              {% endfor %}
+            </div>
+            {% endfor %}
+          </div>
+          <div class="col-md-5 full_click modal" id="full_click">
+            <div class="full_content modal-content">
+              <span class="close close2" style="margin-bottom: 20px;">&times;</span>
+              <div class="top_title">
+                <label for="">Title: </label>
+                <h3 id="h3_title"></h3>
+              </div>
+              <div class="mid_content">
+                <label for="">Content: </label>
+                <p id="p_content"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% else %}
+        <h2>You Don't Have Any Task Yet! Click On New Button To Add Task</h2>
+
+        {% endif %}
+      </div>
+      <div id="myModal" class="container modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+          <span class="close close1">&times;</span>
+          <h1>Add Your Task Here!</h1>
+          <form action="/add_task/" method="POST">
+            {% csrf_token %}
+            <input
+              type="text"
+              placeholder="I want to......"
+              name="title"
+              required
+            />
+            <input type="date" name="date" required />
+            <textarea name="content" cols="30" rows="5" placeholder="Enter Content In Detail (Optional)"></textarea>
+            <div class="button">
+              <button type="submit">Add Task</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+    <!-- The Modal -->
+
+    <script>
+      // Get the modal
+      var modal = document.getElementById("myModal");
+
+      // Get the button that opens the modal
+      var btn = document.getElementById("myBtn");
+
+      // Get the <span> element that closes the modal
+      var span = document.getElementsByClassName("close1")[0];
+
+      // When the user clicks the button, open the modal
+      btn.onclick = function () {
+        modal.style.display = "block";
+      };
+
+      // When the user clicks on <span> (x), close the modal
+      span.onclick = function () {
+        modal.style.display = "none";
+      };
+
+      // When the user clicks anywhere outside of the modal, close it
+      window.onclick = function (event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+      };
+    </script>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      var frm = document.getElementById("myfrm");
+      var inp = frm.querySelectorAll("input");
+      // console.log(inp.length);
+
+      for (i = 0; i < inp.length; i++) {
+        var class_value = inp[i].value;
+        var element_class = document.getElementsByClassName(class_value);
+        var p_class = element_class[0].querySelector("p");
+        var s_class = element_class[0].querySelector("span");
+        var inp_class = element_class[0].querySelector("div > input");
+
+        if (inp_class.checked == false) {
+          p_class.style.textDecoration = "line-through";
+          s_class.style.display = "block";
+          inp_class.checked = true;
+        }
+      }
+
+      function cross(ele) {
+        var cross_id = ele.id;
+        var cross_div = document.getElementsByClassName(cross_id)[0];
+        cross_div.style.display = "none";
+        $.ajax({
+          url: "/ajax/status/delete",
+          data: {
+            class_name: cross_id,
+          },
+          dataType: "json",
+          success: function (data2) {
+            console.log(data2.status_return);
+          },
+        });
+      }
+
+      function full_detail(ele){
+        var fc = document.getElementById('full_click');
+        var h3_title= document.getElementById('h3_title')
+        var p_content= document.getElementById('p_content')
+        fc.style.display = 'block';
+        console.log(ele.id);
+        $.ajax({
+          url: "/ajax/task_details",
+          data: {
+            class_name: ele.id,
+          },
+          dataType: "json",
+          success: function (data3) {
+            console.log(data3.title);
+            console.log(data3.content);
+            h3_title.innerHTML = data3.title;
+            p_content.innerHTML = data3.content;
+          },
+        });
+        var span1 = document.getElementsByClassName("close2")[0];
+        span1.onclick = function () {
+          fc.style.display = "none";
+      };
+      }
+    </script>
+    <script>
+      function ali(ele) {
+        var v = ele.value;
+        console.log(v);
+        var c = document.getElementsByClassName(v);
+        var p = c[0].querySelector("p");
+        var s = c[0].querySelector("span");
+        var f = c[0].querySelector("form > input");
+        task_status = f.value;
+        s.style.display = "none";
+        var status = ele.checked;
+
+        if (status == true) {
+          p.style.textDecoration = "line-through";
+          s.style.display = "block";
+          f.value = "deactivate";
+          $.ajax({
+            url: "/ajax/status",
+            data: {
+              status: f.value,
+              class_name: v,
+            },
+            dataType: "json",
+            success: function (data) {
+              console.log(data.status_return);
+            },
+          });
+        } else {
+          f.value = "activate";
+          p.style.textDecoration = "none";
+          s.style.display = "none";
+          $.ajax({
+            url: "/ajax/status/reactivate",
+            data: {
+              status: f.value,
+              class_name: v,
+            },
+            dataType: "json",
+            success: function (data1) {
+              console.log(data1.status_return);
+            },
+          });
+        }
+      }
+    </script>
+  </body>
+</html>
