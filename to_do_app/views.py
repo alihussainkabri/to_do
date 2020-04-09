@@ -2,8 +2,11 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse,JsonResponse
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.models import User
-from .models import User_details,Task_add,task_date
+from .models import User_details,Task_add,task_date,Verification
 import datetime
+from random import randint
+import smtplib
+
 # Create your views here.
 def index(request):
     return render(request,'to_do_app/base.html')
@@ -13,12 +16,17 @@ def signin(request):
         email = request.POST['email']
         password = request.POST['password']
         username = User.objects.get(email=email)
-        auth = authenticate(request,username=username,password=password)
+        auth = authenticate(request,username=username.username,password=password)
         if auth:
-            login(request,auth)
-            user = User.objects.get(username = auth)
-            request.session['user_id'] = user.id
-            return redirect('/index/')
+            user_check = User_details.objects.get(user=User.objects.get(username = auth))
+            if user_check.status == "verified":
+                login(request,auth)
+                user = User.objects.get(username = auth)
+                request.session['user_id'] = user.id
+                return redirect('/index/')
+            else:
+                msg = 'your account is not verified yet!'
+                return render(request,'to_do_app/login.html',{'msg':msg})
         else:
             msg = 'please provide valid credentials!'
             return render(request,'to_do_app/login.html',{'msg':msg})
@@ -32,10 +40,49 @@ def signup(request):
         mobile = request.POST['mobile']
         user = User.objects.create_user(username=name,email=email,password=password)
         user.save()
-        user_detail = User_details.objects.get_or_create(user = user,mobile=mobile)[0]
+        user_detail = User_details.objects.get_or_create(user = user,mobile=mobile,status = "not-verified")[0]
         user_detail.save()
-        msg = "Your Account Has Been Created Successfully! Please Fill Below Credentials To Login!"
+        otp = randint(1000,9999)
+        temp_user_id =User.objects.filter(username=user)[0].id
+        verification_step = Verification.objects.get_or_create(user = User.objects.filter(username=user)[0],otp=otp,purpose = "signup")[0]
+        verification_step.save()
+        send_mail(temp_user_id)
+        request.session['signup_pass'] = password
+        request.session['temp_user_id'] = temp_user_id
+        request.session['signup_email'] = email
+        # msg = "Your Account Has Been Created Successfully! Please Fill Below Credentials To Login!"
+        return redirect('/verification/')
     return render(request,'to_do_app/login.html',{'msg':msg})
+
+def verification(request):
+    if request.method == 'POST':
+        o1 = request.POST['o1']
+        o2 = request.POST['o2']
+        o3 = request.POST['o3']
+        o4 = request.POST['o4']
+        otp = o1+o2+o3+o4
+        temp_user_id = request.session.get('temp_user_id')
+        print(temp_user_id)
+        match = Verification.objects.get(user = User.objects.get(id=temp_user_id))
+        if match.otp == otp:
+            user_detail_upd = User_details.objects.get(user = User.objects.get(id=temp_user_id))
+            user_detail_upd.status = "verified"
+            user_detail_upd.save()
+            user = Verification.objects.get(user=User.objects.get(id=temp_user_id)).delete()
+            print('1')
+            try:
+                del request.session['signup_pass']
+                del request.session['temp_user_id']
+                del request.session['signup_email']
+            except KeyError:
+                pass
+            msg = "Your Account Has Been Created Successfully! Please Fill Below Credentials To Login!"
+            return render(request,'to_do_app/login.html',{'msg':msg})
+        else:
+            msg = "Please Enter Correct OTP"
+            return render(request,'to_do_app/verification.html',{'msg':msg})
+
+    return render(request,'to_do_app/verification.html')
 
 def signout(request):
     logout(request)
@@ -132,3 +179,22 @@ def ajax_task_details(request):
     }
 
     return JsonResponse(data3)
+
+
+def send_mail(user_id):
+    sender = "list2do52@gmail.com"
+    user_mail = User.objects.get(id=user_id)
+    user_name = user_mail.username
+    reciever = user_mail.email
+    otp_model = Verification.objects.get(user=user_mail)
+    otp = otp_model.otp
+    subject = "OTP VERIFICATION LIST2DO"
+    body = f"Hey {user_name} Thanks To Signup With Us\n\n\nEnter Below OTP In Website To Verify Your Identity\n{otp}"
+    msg = f"Subject : {subject}\n\n\n{body}"
+    server = smtplib.SMTP('smtp.gmail.com',587)
+    server.ehlo()
+    server.starttls()
+    server.ehlo()
+    server.login(sender,'bolbmlktlvkvrvdq')
+    server.sendmail(sender,reciever,msg)
+    server.quit()
