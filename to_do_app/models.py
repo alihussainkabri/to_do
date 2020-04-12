@@ -33,7 +33,7 @@ class Verification(models.Model):
     email = models.CharField(max_length=100,default="")
     otp = models.CharField(max_length=100,default="")
     purpose = models.CharField(max_length=100,default="")
-    date = models.DateField()
+    date = models.DateField(auto_now_add=True)
 
     def __str__(self):
         return self.email + "-" +  str(self.date) + "-"  + self.purpose
