@@ -71,9 +71,13 @@ def signin(request):
     return render(request,'to_do_app/login.html')
 
 def forgot(request):
+    forgot_user = ""
     if request.method == 'POST':
         email = request.POST['email']
-        forgot_user = User.objects.get(email=email)
+        try:
+            forgot_user = User.objects.get(email=email)
+        except Exception as e:
+            pass
         if forgot_user:
             otp = randint(1000,9999)
             forgot_verification = Verification.objects.get_or_create(email=email,otp=otp,purpose="Forgot")[0]
