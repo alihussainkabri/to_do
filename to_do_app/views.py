@@ -16,22 +16,27 @@ next_day = str(datetime.datetime.today() + datetime.timedelta(days=1))
 next_day = next_day.split()[0]
 upcoming_start = str(datetime.datetime.today() + datetime.timedelta(days=2))
 upcoming_start = upcoming_start.split()[0]
-past_data = str(datetime.datetime.today() - datetime.timedelta(days=3))
-past_data = past_data.split()[0]
+past_data_start = str(datetime.datetime.today() - datetime.timedelta(days=4))
+past_data_start = past_data_start.split()[0]
+past_data_end = str(datetime.datetime.today() - datetime.timedelta(days=1))
+past_data_end = past_data_end.split()[0]
 
 def run():
-    global start_date,next_day,upcoming_start,past_data
+    global start_date,next_day,upcoming_start,past_data_start,past_data_end
     while True:
         current_date = str(datetime.datetime.now()).split()[0]
         current_time = str(datetime.datetime.now()).split()[1][0:5]
-        if current_time == "16:00" or current_time == "20:00":
+        if current_time == "16:30" or current_time == "20:30":
             time.sleep(55)
             reminder(current_date,current_time)
         elif current_time == '00:03':
             time.sleep(50)
             past_date = str(datetime.datetime.today() - datetime.timedelta(days=3))
             past_date = past_date.split()[0]
-            past_data = past_date.split()[0]
+            past_data_start = str(datetime.datetime.today() - datetime.timedelta(days=4))
+            past_data_start = past_data_start.split()[0]
+            past_data_end = str(datetime.datetime.today() - datetime.timedelta(days=1))
+            past_data_end = past_data_end.split()[0]
             next_day = str(datetime.datetime.today() + datetime.timedelta(days=1))
             next_day = next_day.split()[0]
             upcoming_start = str(datetime.datetime.today() + datetime.timedelta(days=2))
@@ -184,15 +189,18 @@ def page(request):
     for t in task_detail:
         if t.status == 'deactivate':
             l1.append(t.class_name)
-    today = Task_add.objects.filter(user=full_user,date=start_date)
-    d["Today"] = today
-    next = Task_add.objects.filter(user=full_user,date=next_day)
-    d["Tomorrow"] = next
-    upcoming_end =Task_add.objects.filter(user=full_user).order_by('-date')[0].date
-    upcoming = Task_add.objects.filter(user=full_user,date__range=[upcoming_start,upcoming_end])
-    d["Upcoming"] = upcoming
-    past = Task_add.objects.filter(user=full_user,date__range=[past_data,start_date])
-    d["Past Tasks"] = past
+    if len(task_detail) > 0:
+        today = Task_add.objects.filter(user=full_user,date=start_date)
+        d["Today"] = today
+        next = Task_add.objects.filter(user=full_user,date=next_day)
+        d["Tomorrow"] = next
+        upcoming_end =Task_add.objects.filter(user=full_user).order_by('-date')[0].date
+        upcoming = Task_add.objects.filter(user=full_user,date__range=[upcoming_start,upcoming_end])
+        d["Upcoming"] = upcoming
+        past = Task_add.objects.filter(user=full_user,date__range=[past_data_start,past_data_end])
+        d["Past Tasks"] = past
+    else:
+        d = {}
     return render(request,'to_do_app/index.html',{'d1':d,'l1':l1,'user':full_user})
 
 
