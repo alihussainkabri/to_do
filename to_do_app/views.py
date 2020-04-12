@@ -26,7 +26,7 @@ def run():
     while True:
         current_date = str(datetime.datetime.now()).split()[0]
         current_time = str(datetime.datetime.now()).split()[1][0:5]
-        if current_time == "16:30" or current_time == "20:30":
+        if current_time == "08:30" or current_time == "16:30":
             time.sleep(55)
             reminder(current_date,current_time)
         elif current_time == '00:03':

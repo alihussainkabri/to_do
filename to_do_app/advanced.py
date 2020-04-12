@@ -13,11 +13,11 @@ def reminder(current_date,current_time):
         user_task_dict[user] = user_task
     
     for key,value in user_task_dict.items():
-        if current_time == "20:30":
+        if current_time == "16:30":
             return_status =  send_reminder(key,value,"Good Evening")
             upload = Reminder_data.objects.get_or_create(date=current_date,status ="All Email Sent")[0]
             upload.save()
-        elif current_time == '16:30':
+        elif current_time == '08:30':
             return_status =  send_reminder(key,value,"Good Morning")
 
 
