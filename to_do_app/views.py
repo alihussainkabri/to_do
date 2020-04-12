@@ -178,9 +178,6 @@ def page(request):
     global start_date,upcoming_start,next_day
     d = {}
     l1 = []
-    l2 = []
-    l3 = []
-    l4 = []
     user = request.session.get('user_id')
     full_user = User.objects.get(id=user)
     task_detail = Task_add.objects.filter(user=full_user)
