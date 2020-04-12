@@ -3,11 +3,44 @@ from django.http import HttpResponse,JsonResponse
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.models import User
 from .models import User_details,Task_add,task_date,Verification
+from django.contrib.auth.decorators import login_required
 import datetime
 from random import randint
 import smtplib
+import threading
+import time
+from .advanced import reminder,delete_past
 
-# Create your views here.
+start_date = str(datetime.datetime.now()).split()[0]
+next_day = str(datetime.datetime.today() + datetime.timedelta(days=1))
+next_day = next_day.split()[0]
+upcoming_start = str(datetime.datetime.today() + datetime.timedelta(days=2))
+upcoming_start = upcoming_start.split()[0]
+past_data = str(datetime.datetime.today() - datetime.timedelta(days=3))
+past_data = past_data.split()[0]
+
+def run():
+    global start_date,next_day,upcoming_start,past_data
+    while True:
+        current_date = str(datetime.datetime.now()).split()[0]
+        current_time = str(datetime.datetime.now()).split()[1][0:5]
+        if current_time == "16:00" or current_time == "20:00":
+            time.sleep(55)
+            reminder(current_date,current_time)
+        elif current_time == '00:03':
+            time.sleep(50)
+            past_date = str(datetime.datetime.today() - datetime.timedelta(days=3))
+            past_date = past_date.split()[0]
+            past_data = past_date.split()[0]
+            next_day = str(datetime.datetime.today() + datetime.timedelta(days=1))
+            next_day = next_day.split()[0]
+            upcoming_start = str(datetime.datetime.today() + datetime.timedelta(days=2))
+            upcoming_start = upcoming_start.split()[0]
+            start_date = current_date
+            delete_past(past_date,current_time)
+t1 = threading.Thread(target=run)
+t1.start()
+
 def index(request):
     return render(request,'to_do_app/base.html')
 
@@ -32,26 +65,69 @@ def signin(request):
             return render(request,'to_do_app/login.html',{'msg':msg})
     return render(request,'to_do_app/login.html')
 
+def forgot(request):
+    if request.method == 'POST':
+        email = request.POST['email']
+        forgot_user = User.objects.get(email=email)
+        otp = randint(1000,9999)
+        forgot_verification = Verification.objects.get_or_create(user=forgot_user,otp=otp,purpose="Forget Password")[0]
+        forgot_verification.save()
+        send_mail(forgot_user.id,"forgot")
+        msg = "Forgot"
+        return render(request,'to_do_app/verification.html',{'msg':msg,'email':email})
+
+def forgot1(request):
+    if request.method == 'POST':
+        o1 = request.POST['o1']
+        o2 = request.POST['o2']
+        o3 = request.POST['o3']
+        o4 = request.POST['o4']
+        email = request.POST['email']
+        otp_get = Verification.objects.filter(user = User.objects.get(email=email))[0]
+        otp = o1+o2+o3+o4
+        if otp_get.otp == otp:
+            return render(request,'to_do_app/password.html',{'otp':otp,'email':email})
+
+def forgot2(request):
+    if request.method == 'POST':
+        p1 = request.POST['p1']
+        p2 = request.POST['p2']
+        otp = request.POST['otp']
+        email = request.POST['email']
+        if p1 == p2:
+            otp_get = Verification.objects.filter(user = User.objects.get(email=email))[0]
+            if otp_get.otp == otp:
+                u1 = User.objects.get(email=email)
+                u1.set_password(p1)
+                u1.save()
+                msg = "Your Password Reset Successfully"
+                return render(request,'to_do_app/login.html',{'msg':msg})
+            else:
+                msg = "Incorrect OTP"
+                return render(request,'to_do_app/login.html',{'msg':msg})
+        else:
+            msg = "Password Doesnot Matches"
+            return render(request,'to_do_app/login.html',{'msg':msg})
 def signup(request):
     if request.method == 'POST':
         name = request.POST['name']
         email = request.POST['email']
         password = request.POST['password']
         mobile = request.POST['mobile']
-        user = User.objects.create_user(username=name,email=email,password=password)
-        user.save()
-        user_detail = User_details.objects.get_or_create(user = user,mobile=mobile,status = "not-verified")[0]
-        user_detail.save()
         otp = randint(1000,9999)
-        temp_user_id =User.objects.filter(username=user)[0].id
-        verification_step = Verification.objects.get_or_create(user = User.objects.filter(username=user)[0],otp=otp,purpose = "signup")[0]
+        verification_step = Verification.objects.get_or_create(email=email,otp=otp,purpose = "signup")[0]
         verification_step.save()
-        send_mail(temp_user_id)
-        request.session['signup_pass'] = password
-        request.session['temp_user_id'] = temp_user_id
-        request.session['signup_email'] = email
-        # msg = "Your Account Has Been Created Successfully! Please Fill Below Credentials To Login!"
-        return redirect('/verification/')
+        return_value = send_mail(email,"none")
+        if return_value == 'done':
+            request.session['signup_pass'] = password
+            request.session['signup_email'] = email
+            request.session['signup_mobile'] = mobile
+            request.session['signup_name'] = name
+            # msg = "Your Account Has Been Created Successfully! Please Fill Below Credentials To Login!"
+            return redirect('/verification/')
+        else:
+            msg = "OTP VERIFICATION PROCESS FAILS DUE TO AN ERROR PLEASE TRY LATER!"
+            return render(request,'to_do_app/login.html',{'msg':msg})
     return render(request,'to_do_app/login.html',{'msg':msg})
 
 def verification(request):
@@ -61,18 +137,21 @@ def verification(request):
         o3 = request.POST['o3']
         o4 = request.POST['o4']
         otp = o1+o2+o3+o4
-        temp_user_id = request.session.get('temp_user_id')
-        print(temp_user_id)
-        match = Verification.objects.get(user = User.objects.get(id=temp_user_id))
+        signup_email = request.session.get('signup_email')
+        signup_name = request.session.get('signup_name')
+        signup_pass = request.session.get('signup_pass')
+        signup_mobile = request.session.get('signup_mobile')
+        match = Verification.objects.get(email=signup_email)
         if match.otp == otp:
-            user_detail_upd = User_details.objects.get(user = User.objects.get(id=temp_user_id))
-            user_detail_upd.status = "verified"
-            user_detail_upd.save()
-            user = Verification.objects.get(user=User.objects.get(id=temp_user_id)).delete()
-            print('1')
+            user = User.objects.create_user(username=signup_name,email=signup_email,password=signup_pass)
+            user.save()
+            user_detail = User_details.objects.get_or_create(user = user,mobile=signup_mobile,status = "verified")[0]
+            user_detail.save()
+            verification_delete = Verification.objects.get(email=signup_email).delete()
             try:
                 del request.session['signup_pass']
-                del request.session['temp_user_id']
+                del request.session['signup_mobile']
+                del request.session['signup_name']
                 del request.session['signup_email']
             except KeyError:
                 pass
@@ -84,6 +163,7 @@ def verification(request):
 
     return render(request,'to_do_app/verification.html')
 
+@login_required
 def signout(request):
     logout(request)
     try:
@@ -93,23 +173,33 @@ def signout(request):
     msg = "You Have Been Logged Out Successfully!"
     return render(request,'to_do_app/login.html',{'msg':msg})
 
+@login_required
 def page(request):
+    global start_date,upcoming_start,next_day
     d = {}
     l1 = []
+    l2 = []
+    l3 = []
+    l4 = []
     user = request.session.get('user_id')
     full_user = User.objects.get(id=user)
-    dates = task_date.objects.filter(user=full_user).order_by('date')
-    for date in dates:
-        task = Task_add.objects.filter(user=full_user,date=date.date)
-        if len(task) > 0:
-            d[date.date] = task
-    # print(d1)
     task_detail = Task_add.objects.filter(user=full_user)
     for t in task_detail:
         if t.status == 'deactivate':
             l1.append(t.class_name)
+    today = Task_add.objects.filter(user=full_user,date=start_date)
+    d["Today"] = today
+    next = Task_add.objects.filter(user=full_user,date=next_day)
+    d["Tomorrow"] = next
+    upcoming_end =Task_add.objects.filter(user=full_user).order_by('-date')[0].date
+    upcoming = Task_add.objects.filter(user=full_user,date__range=[upcoming_start,upcoming_end])
+    d["Upcoming"] = upcoming
+    past = Task_add.objects.filter(user=full_user,date__range=[past_data,start_date])
+    d["Past Tasks"] = past
     return render(request,'to_do_app/index.html',{'d1':d,'l1':l1,'user':full_user})
 
+
+@login_required
 def add_task(request):
     if request.method == 'POST':
         title = request.POST['title']
@@ -181,15 +271,17 @@ def ajax_task_details(request):
     return JsonResponse(data3)
 
 
-def send_mail(user_id):
+def send_mail(email,note):
     sender = "list2do52@gmail.com"
-    user_mail = User.objects.get(id=user_id)
-    user_name = user_mail.username
-    reciever = user_mail.email
-    otp_model = Verification.objects.get(user=user_mail)
+    reciever = email
+    otp_model = Verification.objects.filter(email=email)[0]
+
     otp = otp_model.otp
     subject = "OTP VERIFICATION LIST2DO"
-    body = f"Hey {user_name} Thanks To Signup With Us\n\n\nEnter Below OTP In Website To Verify Your Identity\n{otp}"
+    if note == "forgot":
+        body = f"Hey {email} Forgot Password! Don't Worry\n\n\nEnter Below OTP In Website To Verify Your Identity\n{otp}"    
+    else:
+        body = f"Hey {email} Thanks To Signup With Us\n\n\nEnter Below OTP In Website To Verify Your Identity\n{otp}"
     msg = f"Subject : {subject}\n\n\n{body}"
     server = smtplib.SMTP('smtp.gmail.com',587)
     server.ehlo()
@@ -198,3 +290,4 @@ def send_mail(user_id):
     server.login(sender,'bolbmlktlvkvrvdq')
     server.sendmail(sender,reciever,msg)
     server.quit()
+    return 'done'

@@ -30,8 +30,17 @@ class task_date(models.Model):
         return str(self.user.id) + "-" + str(self.date)
     
 class Verification(models.Model):
-    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    email = models.CharField(max_length=100,default="")
     otp = models.CharField(max_length=100,default="")
     purpose = models.CharField(max_length=100,default="")
+    date = models.DateField()
+
     def __str__(self):
-        return self.user.username + "-" + self.purpose
+        return self.email + "-" +  str(self.date) + "-"  + self.purpose
+
+class Reminder_data(models.Model):
+    date = models.DateField()
+    status = models.CharField(max_length=1000,default="")
+
+    def __str__(self):
+        return str(self.date) + "-" + self.status

@@ -23,6 +23,8 @@
     <title>Hello, world!</title>
   </head>
   <body>
+    <div id="load"></div>
+    <div id="contents">
     <div class="container">
       <nav class="navbar navbar-expand-lg navbar-light">
         <a class="navbar-brand" href="#"
@@ -79,15 +81,15 @@
                   />
                 </div>
                 <p onclick="full_detail(this)" id="{{v.class_name}}">
-                  {{v.title|slice:":34"}}
-                  <span
-                    ><i
-                      class="fa fa-times"
-                      id="{{v.class_name}}"
-                      onclick="cross(this)"
-                    ></i
+                  {{v.title|slice:":34"}} </p>
+                <span
+                  ><i
+                    class="fa fa-times"
+                    id="{{v.class_name}}"
+                    onclick="cross(this)"
+                  ></i
                   ></span>
-                </p>
+                
                 <form action="">
                   <input type="hidden" name="status" value="{{v.status}}" />
                 </form>
@@ -137,6 +139,7 @@
         </div>
       </div>
     </section>
+  </div>
     <!-- The Modal -->
 
     <script>
@@ -179,6 +182,21 @@
       integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
       crossorigin="anonymous"
     ></script>
+    <script>
+      document.onreadystatechange = function () {
+          var state = document.readyState
+          if (state == 'interactive') {
+              document.getElementById('contents').style.visibility="hidden";
+          }
+           else if (state == 'complete') {
+              setTimeout(function(){
+              document.getElementById('interactive');
+              document.getElementById('load').style.visibility="hidden";
+              document.getElementById('contents').style.visibility="visible";
+              },1000);
+          }
+      }
+  </script>
     <script>
       var frm = document.getElementById("myfrm");
       var inp = frm.querySelectorAll("input");

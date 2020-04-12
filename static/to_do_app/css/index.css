@@ -55,7 +55,7 @@ nav li {
   margin: 30px 15px;
   padding: 15px 10px;
   overflow-x: none !important;
-  overflow-y: auto !important;
+  overflow-y: scroll !important;
   width: 440px !important;
   border-radius: 5px;
   scroll-behavior: smooth;
@@ -105,7 +105,7 @@ nav li {
     width: 75%;
 }
 #main .day span{display: none;float: right;cursor: pointer;background: transparent;}
-#main .day p span i{
+#main .day span i{
   width: 20px;
   height: 20px;
   border: 1px solid #d8d8d8;
@@ -123,7 +123,7 @@ nav li {
   top: 50%!important;
   transform: translate(-50%,-50%);
   width: 400px!important;
-  overflow-y: visible!important;
+  overflow-y: hidden!important;
 }
 
 /* Modal Content */
@@ -258,6 +258,13 @@ nav li {
   padding: 13px 10px;
   max-width: 300px;
 }
+#load{
+  width:100vw;
+  height:100vh;
+  position:fixed;
+  z-index:9999;
+  background:url("./loading_large.gif") no-repeat center center rgba(0,0,0,0.25)
+}
 @media only screen and (max-width:985px){
   #main .day .check{
     margin-right: 10px!important;
@@ -265,7 +272,7 @@ nav li {
 }
 #main .day p{
     margin: 6px 5px!important;
-    width: 75%!important;
+    width: 65%!important;
 }
 }
 @media only screen and (max-width:417px){
@@ -279,7 +286,7 @@ nav li {
   }
   #main .day p{
     margin: 6px 12px!important;
-    width: 75%!important;
+    width: 65%!important;
   }
   #main .events{
     margin: 10px 0px!important;
@@ -296,7 +303,7 @@ nav li {
   }
   #main .day p{
     margin: 6px 5px!important;
-    width: 75%!important;
+    width: 60%!important;
   }
   .full_click h3,label,p{
     font-size: 20px!important;
@@ -317,7 +324,7 @@ nav li {
   }
   #main .day p{
     margin: 6px 12px!important;
-    width: 75%!important;
+    width: 50%!important;
   }
   #main .events{
     margin: 10px 0px!important;

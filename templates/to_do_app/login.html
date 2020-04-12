@@ -12,6 +12,8 @@
     <title>List2Do-Login</title>
   </head>
   <body>
+    <div id="load"></div>
+    <div id="contents">
     <section id="login">
         <div class="container">
             <div class="row">
@@ -70,7 +72,20 @@
                         <div class="form-group">
                           <input type="password" class="form-control" placeholder="Password" name="password" required>
                         </div>
-                        <a href="">Forgot Password</a>
+                        <a href="#" onclick="forgot1()">Forgot Password</a>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                    </div>
+                    <div class="forgot" id="forgot">
+                    <form method="POST" action="/forgot/">
+                        {% csrf_token %}
+                        <h2>Forgot Password!</h2>
+                        {% if msg %}
+                            <p>{{msg}}</p>
+                        {% endif %}
+                        <div class="form-group">
+                          <input type="email" class="form-control" placeholder="Enter email" name="email" required>
+                        </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
                     </div>
@@ -99,14 +114,31 @@
             </div>
         </div>
     </section>
+</div>  
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script>
+        document.onreadystatechange = function () {
+            var state = document.readyState
+            if (state == 'interactive') {
+                document.getElementById('contents').style.visibility="hidden";
+            }
+             else if (state == 'complete') {
+                setTimeout(function(){
+                document.getElementById('interactive');
+                document.getElementById('load').style.visibility="hidden";
+                document.getElementById('contents').style.visibility="visible";
+                },1000);
+            }
+        }
+    </script>
+    <script>
         var signin = document.getElementById('signin');
         var signup = document.getElementById('signout');
+        var forgot = document.getElementById('forgot');
         var para = document.getElementById('mypara');
         var para1 = document.getElementById('mypara1');
 
@@ -114,18 +146,27 @@
         para1.style.display = 'none';
         signin.style.display = 'block';
         signup.style.display = "none";
-
+        forgot.style.display = "none";
         function sign_up() {
             signin.style.display = "none";
             signup.style.display = "block";
             para.style.display = "none";
             para1.style.display = "block";
+            forgot.style.display = "none";
         }
         function sign_in() {
             signin.style.display = "block";
             signup.style.display = "none";
             para.style.display = "block";
             para1.style.display = "none";
+            forgot.style.display = "none";
+        }
+        function forgot1() {
+            signin.style.display = "none";
+            signup.style.display = "none";
+            para.style.display = "none";
+            para1.style.display = "none";
+            forgot.style.display = "block";
         }
     </script>
   </body>

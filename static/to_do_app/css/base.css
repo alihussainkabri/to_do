@@ -319,6 +319,13 @@ nav{
 #footer p{
     font-size: 18px;
 }
+#load{
+    width:100vw;
+    height:100vh;
+    position:fixed;
+    z-index:9999;
+    background:url("./loading_large.gif") no-repeat center center rgba(0,0,0,0.25)
+  }
 
 
 
