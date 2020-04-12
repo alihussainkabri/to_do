@@ -74,12 +74,21 @@ def forgot(request):
     if request.method == 'POST':
         email = request.POST['email']
         forgot_user = User.objects.get(email=email)
-        otp = randint(1000,9999)
-        forgot_verification = Verification.objects.get_or_create(user=forgot_user,otp=otp,purpose="Forget Password")[0]
-        forgot_verification.save()
-        send_mail(forgot_user.id,"forgot")
-        msg = "Forgot"
-        return render(request,'to_do_app/verification.html',{'msg':msg,'email':email})
+        if forgot_user:
+            otp = randint(1000,9999)
+            forgot_verification = Verification.objects.get_or_create(email=email,otp=otp,purpose="Forgot")[0]
+            forgot_verification.save()
+            return_value = send_mail(email,"forgot")
+            if return_value == "done":
+                msg = "Forgot"
+                return render(request,'to_do_app/verification.html',{'msg':msg,'email':email})
+            else:
+                msg = "Process Not Complete"
+                Verification.objects.filter(email=email)[0].delete()
+                return render(request,'to_do_app/login.html',{'msg':msg})
+        else :
+            msg = "No User Found With This Email"
+            return render(request,'to_do_app/login.html',{'msg':msg})
 
 def forgot1(request):
     if request.method == 'POST':
@@ -88,11 +97,15 @@ def forgot1(request):
         o3 = request.POST['o3']
         o4 = request.POST['o4']
         email = request.POST['email']
-        otp_get = Verification.objects.filter(user = User.objects.get(email=email))[0]
+        otp_get = Verification.objects.filter(email=email)[0]
         otp = o1+o2+o3+o4
         if otp_get.otp == otp:
             return render(request,'to_do_app/password.html',{'otp':otp,'email':email})
-
+        else:
+            msg = "Process Not Complete"
+            Verification.objects.filter(email=email)[0].delete()
+            return render(request,'to_do_app/login.html',{'msg':msg})
+            
 def forgot2(request):
     if request.method == 'POST':
         p1 = request.POST['p1']
@@ -100,18 +113,21 @@ def forgot2(request):
         otp = request.POST['otp']
         email = request.POST['email']
         if p1 == p2:
-            otp_get = Verification.objects.filter(user = User.objects.get(email=email))[0]
+            otp_get = Verification.objects.filter(email=email)[0]
             if otp_get.otp == otp:
                 u1 = User.objects.get(email=email)
                 u1.set_password(p1)
                 u1.save()
+                Verification.objects.filter(email=email)[0].delete()
                 msg = "Your Password Reset Successfully"
                 return render(request,'to_do_app/login.html',{'msg':msg})
             else:
-                msg = "Incorrect OTP"
+                msg = "Incorrect OTP Please Go to Login Page Again and Try Again"
+                Verification.objects.filter(email=email)[0].delete()
                 return render(request,'to_do_app/login.html',{'msg':msg})
         else:
             msg = "Password Doesnot Matches"
+            Verification.objects.filter(email=email)[0].delete()
             return render(request,'to_do_app/login.html',{'msg':msg})
 def signup(request):
     if request.method == 'POST':
@@ -131,7 +147,8 @@ def signup(request):
             # msg = "Your Account Has Been Created Successfully! Please Fill Below Credentials To Login!"
             return redirect('/verification/')
         else:
-            msg = "OTP VERIFICATION PROCESS FAILS DUE TO AN ERROR PLEASE TRY LATER!"
+            msg = "OTP VERIFICATION PROCESS FAILS DUE TO AN ERROR PLEASE TRY LATER BY GOING TO SIGNUP PAGE!"
+            Verification.objects.filter(email=email).delete()
             return render(request,'to_do_app/login.html',{'msg':msg})
     return render(request,'to_do_app/login.html',{'msg':msg})
 
@@ -163,7 +180,8 @@ def verification(request):
             msg = "Your Account Has Been Created Successfully! Please Fill Below Credentials To Login!"
             return render(request,'to_do_app/login.html',{'msg':msg})
         else:
-            msg = "Please Enter Correct OTP"
+            msg = "PROCESS NOT COMPLETE DUE TO INCORRECT OTP PLEASE GO AGAIN TO SIGNUP PAGE AND CONTINUE!"
+            Verification.objects.get(email=signup_email).delete()
             return render(request,'to_do_app/verification.html',{'msg':msg})
 
     return render(request,'to_do_app/verification.html')
