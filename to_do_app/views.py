@@ -50,26 +50,28 @@ def index(request):
     return render(request,'to_do_app/base.html')
 
 def signin(request):
-    if request.method == 'POST':
-        email = request.POST['email']
-        password = request.POST['password']
-        username = User.objects.get(email=email)
-        auth = authenticate(request,username=username.username,password=password)
-        if auth:
-            user_check = User_details.objects.get(user=User.objects.get(username = auth))
-            if user_check.status == "verified":
-                login(request,auth)
-                user = User.objects.get(username = auth)
-                request.session['user_id'] = user.id
-                return redirect('/index/')
+    if request.session.get('user_id') == None:
+        if request.method == 'POST':
+            email = request.POST['email']
+            password = request.POST['password']
+            username = User.objects.get(email=email)
+            auth = authenticate(request,username=username.username,password=password)
+            if auth:
+                user_check = User_details.objects.get(user=User.objects.get(username = auth))
+                if user_check.status == "verified":
+                    login(request,auth)
+                    user = User.objects.get(username = auth)
+                    request.session['user_id'] = user.id
+                    return redirect('/index/')
+                else:
+                    msg = 'your account is not verified yet!'
+                    return render(request,'to_do_app/login.html',{'msg':msg})
             else:
-                msg = 'your account is not verified yet!'
+                msg = 'please provide valid credentials!'
                 return render(request,'to_do_app/login.html',{'msg':msg})
-        else:
-            msg = 'please provide valid credentials!'
-            return render(request,'to_do_app/login.html',{'msg':msg})
-    return render(request,'to_do_app/login.html')
-
+        return render(request,'to_do_app/login.html')
+    else:
+        return redirect('/index/')
 def forgot(request):
     forgot_user = ""
     if request.method == 'POST':
